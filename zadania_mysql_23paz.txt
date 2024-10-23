@@ -1,0 +1,122 @@
+Zad. 1.:
+1)
+CREATE TABLE postac (
+id_postaci INT AUTO_INCREMENT,
+nazwa VARCHAR(40) NOT NULL,
+rodzaj ENUM('wiking', 'ptak', 'kobieta') NOT NULL,
+data_ur DATE NOT NULL,
+wiek int UNSIGNED NOT NULL,
+PRIMARY KEY (id_postaci)
+);
+
+2)
+INSERT INTO postac (nazwa, rodzaj, data_ur, wiek)
+VALUES
+('Bjorn', 'wiking', '1992-02-05', 32),
+('Drozd', 'ptak', '2015-06-12', 9),
+('Tesciowa', 'kobieta', '1960-09-11', 88);
+
+3)
+UPDATE postac
+SET wiek = 88
+WHERE nazwa = 'Tesciowa';
+
+
+Zad. 2.:
+1)
+CREATE TABLE walizka (
+id_walizki INT AUTO_INCREMENT,
+pojemnosc INT UNSIGNED NOT NULL,
+kolor ENUM('rozowy', 'czerwony', 'teczowy', 'zolty') NOT NULL,
+id_wlasciciela INT NOT NULL,
+PRIMARY KEY (id_walizki),
+FOREIGN KEY (id_wlasciciela) REFERENCES postac(id_postaci) ON DELETE CASCADE
+);
+
+2)
+ALTER TABLE walizka 
+MODIFY COLUMN kolor ENUM('rozowy', 'czerwony', 'teczowy', 'zolty') NOT NULL DEFAULT 'rozowy';
+
+3)
+INSERT INTO walizka (pojemnosc, kolor, id_wlasciciela)
+VALUES
+(20, 'czerwony', 4),
+(10, 'zolty', 6);
+
+
+Zad. 3.:
+1)
+CREATE TABLE izba (
+adres_budynku VARCHAR(70),
+nazwa_izby VARCHAR(40),
+metraz INT UNSIGNED NOT NULL,
+wlasciciel INT,
+PRIMARY KEY (adres_budynku, nazwa_izby),
+FOREIGN KEY (wlasciciel) REFERENCES postac(id_postaci) ON DELETE SET NULL
+);
+
+2)
+ALTER TABLE izba
+ADD kolor_izby ENUM('czerwony', 'bialy', 'niebieski', 'czarny', 'zolty', 'zielony') NOT NULL DEFAULT 'czarny';
+
+3)
+INSERT INTO izba (adres_budynku, nazwa_izby, metraz, wlasciciel)
+VALUES
+('Kolejowa 3', 'Izba A', 300, 4);
+
+
+Zad. 4.:
+1)
+CREATE TABLE przetwory (
+id_przetworu INT AUTO_INCREMENT,
+rok_produkcji SMALLINT NOT NULL DEFAULT 1654,
+id_wykonawcy INT NOT NULL,
+zawartosc VARCHAR(100) NOT NULL,
+dodatek VARCHAR(100) NOT NULL DEFAULT 'papryczka chilli',
+id_konsumenta INT NOT NULL,
+PRIMARY KEY (id_przetworu),
+FOREIGN KEY (id_wykonawcy) REFERENCES postac(id_postaci),
+FOREIGN KEY (id_konsumenta) REFERENCES postac(id_postaci)
+);
+
+2)
+INSERT INTO przetwory (rok_produkcji, id_wykonawcy, zawartosc, id_konsumenta)
+VALUES
+(2018, 6, 'bigos', 4);
+
+
+Zad. 5.:
+1)
+INSERT INTO postac (nazwa, rodzaj, data_ur, wiek)
+VALUES
+('Ajorn', 'wiking', '1992-03-07', 32),
+('Cjorn', 'wiking', '1990-06-07', 34),
+('Djorn', 'wiking', '1991-12-11', 33),
+('Torbjorn', 'wiking', '1989-01-02', 35),
+('Fjorn', 'wiking', '1989-05-20', 35);
+
+2)
+CREATE TABLE statek (
+nazwa_statku VARCHAR(40),
+rodzaj_statku ENUM('zeglarski', 'podwodny', 'szybki') NOT NULL,
+data_wodowania DATE NOT NULL,
+max_ladownosc INT UNSIGNED NOT NULL,
+PRIMARY KEY (nazwa_statku)
+);
+
+3)
+INSERT INTO statek (nazwa_statku, rodzaj_statku, data_wodowania, max_ladownosc)
+VALUES
+('Borealis', 'szybki', '2093-01-27', 300),
+('Seamoth', 'podwodny', '2137-06-26', 40);
+
+4)
+ALTER TABLE postac
+ADD funkcja VARCHAR(30);
+
+5)
+UPDATE postac
+SET funkcja = 'kapitan'
+WHERE nazwa = 'Bjorn';
+
+6)
