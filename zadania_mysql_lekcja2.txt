@@ -1,0 +1,105 @@
+Zad. 1.:
+a)
+DELETE FROM postac
+WHERE rodzaj = 'wiking' AND nazwa != 'Bjorn'
+ORDER BY data_ur ASC
+LIMIT 2;
+
+b)
+ALTER TABLE walizka DROP FOREIGN KEY walizka_ibfk_1;
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_1;
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_2;
+ALTER TABLE postac
+DROP PRIMARY KEY;
+DROP COLUMN id_postaci;
+
+
+
+Zad. 2.:
+a)
+ALTER TABLE postac ADD pesel VARCHAR(11) NOT NULL;
+UPDATE postac SET pesel = '12345678910' WHERE nazwa = 'Bjorn';
+UPDATE postac SET pesel = '22345678910' WHERE nazwa = 'Drozd';
+UPDATE postac SET pesel = '32345678910' WHERE nazwa = 'Tesciowa';
+UPDATE postac SET pesel = '42345678910' WHERE nazwa = 'Ajorn';
+UPDATE postac SET pesel = '52345678910' WHERE nazwa = 'Cjorn';
+UPDATE postac SET pesel = '62345678910' WHERE nazwa = 'Djorn';
+ALTER TABLE postac ADD PRIMARY KEY (pesel);
+
+b)
+ALTER TABLE postac
+MODIFY COLUMN rodzaj ENUM('wiking','ptak','kobieta','syrena') NOT NULL;
+
+c)
+INSERT INTO postac (nazwa, rodzaj, data_ur, wiek, pesel)
+VALUES ('Gertruda Nieszczera', 'syrena', '1602-01-22', 422, '72345678910');
+
+
+
+Zad. 3.:
+a)
+UPDATE postac
+SET nazwa_statku = 'Borealis'
+WHERE nazwa LIKE '%a%';
+
+b)
+UPDATE stateks
+SET max_ladownosc = max_ladownosc * 0.7
+WHERE data_wodowania BETWEEN '1901-01-01' AND '2000-12-31';
+
+c)
+ALTER TABLE postac
+ADD CHECK (wiek<=1000);
+
+
+
+Zad. 4.:
+a)
+ALTER TABLE postac
+MODIFY COLUMN rodzaj ENUM('wiking', 'ptak', 'kobieta', 'syrena', 'waz') NOT NULL;
+INSERT INTO postac (nazwa, rodzaj, data_ur, wiek, pesel)
+VALUES ('Loco', 'waz', '2012-09-09', 12, '09876543212');
+
+b)
+CREATE TABLE marynarz AS
+SELECT * FROM postac WHERE nazwa_statku IS NOT NULL;
+
+c)
+ALTER TABLE marynarz
+ADD PRIMARY KEY(pesel);
+ALTER TABLE marynarz
+ADD FOREIGN KEY(nazwa_statku) REFERENCES statek(nazwa_statku);
+
+
+
+
+Zad. 5.:
+a)
+DELETE FROM marynarz;
+UPDATE postac SET nazwa_statku = NULL;
+
+b)
+DELETE FROM postac WHERE rodzaj = 'wiking' LIMIT 1;
+
+c)
+DELETE FROM statek;
+
+d)
+ALTER TABLE postac
+DROP FOREIGN KEY postac_ibfk_1,
+DROP COLUMN nazwa_statku;
+ALTER TABLE marynarz
+DROP FOREIGN KEY marynarz_ibfk_1;
+DROP TABLE statek;
+
+e)
+CREATE TABLE zwierz(
+id INT AUTO_INCREMENT,
+nazwa VARCHAR(40) NOT NULL,
+wiek INT UNSIGNED NOT NULL,
+PRIMARY KEY(id)
+);
+
+f)
+INSERT INTO zwierz (nazwa, wiek)
+SELECT nazwa, wiek FROM postac WHERE rodzaj = 'ptak' OR rodzaj = 'waz';

@@ -1,0 +1,10 @@
+Zad. 1.:
+a)
+CREATE TABLE balsj.kreatura AS
+SELECT * FROM wikingowie.kreatura;
+CREATE TABLE balsj.zasob AS
+SELECT * FROM wikingowie.zasob;
+CREATE TABLE balsj.ekwipunek AS
+SELECT * FROM wikingowie.ekwipunek;
+
+b)
